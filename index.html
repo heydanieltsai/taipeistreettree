@@ -1,0 +1,5173 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='utf-8' />
+  <title>Taipei Street Tree</title>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css' rel='stylesheet' />
+
+  <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.2.0/mapbox-gl-geocoder.min.js'></script>
+  <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.2.0/mapbox-gl-geocoder.css' type='text/css' />
+  <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    #map {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+    }
+
+    .mapboxgl-popup-content{
+      font-weight: bold;
+      text-transform:capitalize;
+    }
+
+  </style>
+</head>
+<body>
+  <style>
+    .filter-group {
+    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-weight: 500;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    border-radius: 3px;
+    width: 180px;
+    }
+
+    .filter-group input[type='checkbox']:first-child + label {
+    border-radius: 3px 3px 0 0;
+    }
+
+    .filter-group label:last-child {
+    border-radius: 0 0 3px 3px;
+    border: none;
+    }
+
+    .filter-group input[type='checkbox'] {
+    display: none;
+    }
+
+    .filter-group input[type='checkbox'] + label {
+    background-color: grey;
+    display: block;
+    cursor: pointer;
+    padding: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    }
+
+    .filter-group input[type='checkbox'] + label {
+    background-color: grey;
+    text-transform: capitalize;
+    }
+
+    .filter-group input[type='checkbox'] + label:hover,
+    .filter-group input[type='checkbox']:checked + label {
+    background-color: white;
+    }
+
+    .filter-group input[type='checkbox']:checked + label:before {
+    content: '●';
+    margin-right: 5px;
+    }
+  </style>
+
+  <div id='map'></div>
+
+  <nav id="filter-group" class="filter-group"></nav>
+
+  <script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoiaGV5ZGFuaWVsdHNhaSIsImEiOiJjazhlMGMwbTAxMDNkM21vNTl5dGtzMnVtIn0.c-f8dLi-F8hergaKDRF6sg';
+
+    var map = new mapboxgl.Map({
+      container: 'map', // Specify the container ID
+      style: 'mapbox://styles/heydanieltsai/ck8e0hyc7455t1ik9ihjsseuk', // Specify which map style to use
+      center: [121.548613, 25.039264], // Specify the starting position [lng, lat]
+      zoom: 12 // Specify the starting zoom
+    });
+
+    //the search bar
+    map.on('load', function() {
+      var geocoder = new MapboxGeocoder({ // Initialize the geocoder
+        accessToken: mapboxgl.accessToken, // Set the access token
+        mapboxgl: mapboxgl, // Set the mapbox-gl instance
+        zoom: 13, // Set the zoom level for geocoding results
+        placeholder: "Enter an address or place name", // This placeholder text will display in the search bar
+        bbox: [] // Set a bounding box
+      });
+      // Add the geocoder to the map
+      map.addControl(geocoder, 'top-left'); // Add the search box to the top left
+    });
+
+    var places =
+      {'type': 'FeatureCollection', "features": [
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549129,
+              25.039074
+            ],
+            "type": "Point"
+          },
+          "id": "01278b0fe5553c21f393cfeac83f05ef"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549003,
+              25.039174
+            ],
+            "type": "Point"
+          },
+          "id": "0238ffe96ad17aca5aadf638edd380e9"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550888,
+              25.038604
+            ],
+            "type": "Point"
+          },
+          "id": "041bc7c119df4f1e617482645809326c"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548144,
+              25.037467
+            ],
+            "type": "Point"
+          },
+          "id": "04e66a0c58da2883b0aa5bf1852c8dbd"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549021,
+              25.039295
+            ],
+            "type": "Point"
+          },
+          "id": "053f2e6e649ccc315c67feb92de9725b"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548786,
+              25.039406
+            ],
+            "type": "Point"
+          },
+          "id": "05a07eee2b368344b19ec7a8acc8f14c"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549259,
+              25.037285
+            ],
+            "type": "Point"
+          },
+          "id": "05a3cd0aec1c6ba3031331e71de5b767"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550062,
+              25.039077
+            ],
+            "type": "Point"
+          },
+          "id": "081cd2caed9601340a908b0988cbce0d"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "hong kong orchid tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548648,
+              25.03814
+            ],
+            "type": "Point"
+          },
+          "id": "088abec7c1b73f7cfd63e133d2f63a77"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549161,
+              25.038401
+            ],
+            "type": "Point"
+          },
+          "id": "08a2c8d598e41b79aaeb3b30a060e7df"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548894,
+              25.038964
+            ],
+            "type": "Point"
+          },
+          "id": "0916cb1f0beabf85b78d403bb3e885d4"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "indian beech tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550836,
+              25.038511
+            ],
+            "type": "Point"
+          },
+          "id": "09fcbb97d8821664d10332ab044ed920"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548694,
+              25.038987
+            ],
+            "type": "Point"
+          },
+          "id": "0a478331c3aab74fc2b78a07dc911b37"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548776,
+              25.038797
+            ],
+            "type": "Point"
+          },
+          "id": "0aa4b790ad0d881a1146e8ff24db77e6"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550008,
+              25.037615
+            ],
+            "type": "Point"
+          },
+          "id": "0ab754981eb0273023228889f7e58b9d"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549069,
+              25.039854
+            ],
+            "type": "Point"
+          },
+          "id": "0ae8d088291a7fa26640522b421cc53f"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549499,
+              25.039881
+            ],
+            "type": "Point"
+          },
+          "id": "0bad8c2545a40f18ebe96d200a19f748"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549063,
+              25.03908
+            ],
+            "type": "Point"
+          },
+          "id": "0c2dbb64b5f92b4f9da9bb4eabc75358"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.551464,
+              25.038027
+            ],
+            "type": "Point"
+          },
+          "id": "0cd6f2070cd77063b8606d83c559f220"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548148,
+              25.038432
+            ],
+            "type": "Point"
+          },
+          "id": "0fad5af9dabc8c043ccf8978d7008b10"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549661,
+              25.038243
+            ],
+            "type": "Point"
+          },
+          "id": "10e21697fd41cc8baf095ee23e52ae97"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550554,
+              25.038056
+            ],
+            "type": "Point"
+          },
+          "id": "1193ecbceb08c246bb1c257fe32f9e4c"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549861,
+              25.039536
+            ],
+            "type": "Point"
+          },
+          "id": "120bb0570c93b8225b97fbff28a81846"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "indian beech tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549839,
+              25.039424
+            ],
+            "type": "Point"
+          },
+          "id": "1218204a6b217328ebedc942cd034d4d"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548672,
+              25.039098
+            ],
+            "type": "Point"
+          },
+          "id": "122350fd3b8350b86f266ff229a039b6"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549617,
+              25.037398
+            ],
+            "type": "Point"
+          },
+          "id": "12300c36c2170ddb3a3529fa4e12c1d0"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549061,
+              25.040195
+            ],
+            "type": "Point"
+          },
+          "id": "13f866066267744073ba45974ae0e114"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548962,
+              25.040233
+            ],
+            "type": "Point"
+          },
+          "id": "14aec53074308403ed06c949f81ecb43"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.54807,
+              25.037597
+            ],
+            "type": "Point"
+          },
+          "id": "15748c24d8faff52af2b1cdbf09c056f"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "indian beech tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549457,
+              25.039762
+            ],
+            "type": "Point"
+          },
+          "id": "158898b3423c62b3fecee66f92797677"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548961,
+              25.039856
+            ],
+            "type": "Point"
+          },
+          "id": "164dc261c24fdea80d614fa8758fa198"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "indian beech tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550928,
+              25.038429
+            ],
+            "type": "Point"
+          },
+          "id": "16a1d4a9703b3908a5ec432972fc2ce6"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549731,
+              25.038138
+            ],
+            "type": "Point"
+          },
+          "id": "16d42a132ff1f889411ba1c1ef725532"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.547743,
+              25.037669
+            ],
+            "type": "Point"
+          },
+          "id": "186af299902521244470531201356d9f"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548917,
+              25.040193
+            ],
+            "type": "Point"
+          },
+          "id": "1878e64534ed1135bebed9ac47fc8150"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550505,
+              25.038693
+            ],
+            "type": "Point"
+          },
+          "id": "18b742cca1f9997e48340ecb7cd87f3d"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548785,
+              25.039322
+            ],
+            "type": "Point"
+          },
+          "id": "18cc1b102a61f7a0b3443fb5bbd38688"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "indian beech tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550503,
+              25.038816
+            ],
+            "type": "Point"
+          },
+          "id": "1ab3148f9602d94b1ba94e9c9c2e8f26"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548958,
+              25.038962
+            ],
+            "type": "Point"
+          },
+          "id": "1ae25976f3b160852a4eaf3f047f7239"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550327,
+              25.03806
+            ],
+            "type": "Point"
+          },
+          "id": "1cf7353b36be13c48d90a55895ff461b"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "formosan gum"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550095,
+              25.039326
+            ],
+            "type": "Point"
+          },
+          "id": "1d9043f4daa3a91c6f7ed1c77d7d2ea5"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.54906,
+              25.039007
+            ],
+            "type": "Point"
+          },
+          "id": "213c4959b1a781242c99328043e2056e"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549139,
+              25.040351
+            ],
+            "type": "Point"
+          },
+          "id": "21a38b2575169840779fd33ca5ae9528"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.54984,
+              25.039274
+            ],
+            "type": "Point"
+          },
+          "id": "2203237dcac4fc1a2f413f941b9b9bda"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548965,
+              25.03981
+            ],
+            "type": "Point"
+          },
+          "id": "22cba3babdf9ee6c313f987e09585def"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549133,
+              25.039386
+            ],
+            "type": "Point"
+          },
+          "id": "235abef1331fb3ae29cfcbf02c4cb3d8"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "beach sheoak"
+          },
+          "geometry": {
+            "coordinates": [
+              121.54827,
+              25.037616
+            ],
+            "type": "Point"
+          },
+          "id": "23afd616bcb8129c45b358a92c47393a"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548897,
+              25.039295
+            ],
+            "type": "Point"
+          },
+          "id": "243a570e5b1b7b0b7f703ebdb4a4198d"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548166,
+              25.038076
+            ],
+            "type": "Point"
+          },
+          "id": "25164ad3bbb3aeb444fc69ff38f9489b"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "hong kong orchid tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548722,
+              25.037485
+            ],
+            "type": "Point"
+          },
+          "id": "26498b9b3a6f3d0332bd03c2dcdbfddd"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.547888,
+              25.038091
+            ],
+            "type": "Point"
+          },
+          "id": "2649e2468e3831238789ea53e0124c7a"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550442,
+              25.038756
+            ],
+            "type": "Point"
+          },
+          "id": "269b633ea9499ba6f957732db4318f15"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550001,
+              25.03807
+            ],
+            "type": "Point"
+          },
+          "id": "26cc28c5f341ddcf74adc13a046c99ca"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549265,
+              25.038329
+            ],
+            "type": "Point"
+          },
+          "id": "27d34fcc9724a59fa20c4b9103d69f59"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548887,
+              25.039048
+            ],
+            "type": "Point"
+          },
+          "id": "288d68d0dbeb32bb34f50fe358c5414d"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548199,
+              25.038484
+            ],
+            "type": "Point"
+          },
+          "id": "298a351d54ffe1601bd2b7c0b3a7aab7"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549053,
+              25.03965
+            ],
+            "type": "Point"
+          },
+          "id": "2a05cf11673ddd5b91e4976ed16da539"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549128,
+              25.039138
+            ],
+            "type": "Point"
+          },
+          "id": "2ad8a4e09fb2d4abf6f56249eb585d8b"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549501,
+              25.03959
+            ],
+            "type": "Point"
+          },
+          "id": "2b82a1cd012bc249eff6b16ddb093d13"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549888,
+              25.038074
+            ],
+            "type": "Point"
+          },
+          "id": "2bc1028ba27893896b9cacedc33cf409"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549022,
+              25.039716
+            ],
+            "type": "Point"
+          },
+          "id": "2c3b676363c9bfd1b4cf6090e842e6c6"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548618,
+              25.039096
+            ],
+            "type": "Point"
+          },
+          "id": "2c5adb31726bb6ae5068abf2b17d4a8c"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548231,
+              25.037205
+            ],
+            "type": "Point"
+          },
+          "id": "2c7ea96d5053edee193f9ab3cfb86569"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.547832,
+              25.037667
+            ],
+            "type": "Point"
+          },
+          "id": "2cc05e1fac7d1dc9476d44b0ef79cd78"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549199,
+              25.038648
+            ],
+            "type": "Point"
+          },
+          "id": "2cd0f99ad6cb29faa1f570b78c919f76"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "indian beech tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.54964,
+              25.039611
+            ],
+            "type": "Point"
+          },
+          "id": "2d3fc0adc87619ab28c4fa55c788746f"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549671,
+              25.039715
+            ],
+            "type": "Point"
+          },
+          "id": "2e23145cb217c7b2139af501f1694dd2"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548917,
+              25.040297
+            ],
+            "type": "Point"
+          },
+          "id": "326b878000eafe9adf8a75862d2f063b"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549016,
+              25.039653
+            ],
+            "type": "Point"
+          },
+          "id": "3349abf54c5fbea8be1040278e03fab2"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549004,
+              25.039465
+            ],
+            "type": "Point"
+          },
+          "id": "33646d1266d57f6548a20e1e6a81af99"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548786,
+              25.039207
+            ],
+            "type": "Point"
+          },
+          "id": "341d643f0b1cf6146bb9d11127696809"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549143,
+              25.037362
+            ],
+            "type": "Point"
+          },
+          "id": "3507057ed7dea8b148b3f3c68f9dec5c"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549297,
+              25.037132
+            ],
+            "type": "Point"
+          },
+          "id": "35376456c6222a90cbec5b065bbd48d6"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549131,
+              25.039193
+            ],
+            "type": "Point"
+          },
+          "id": "3627013a0f50453c5519a4a6e77c2093"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.54862,
+              25.039201
+            ],
+            "type": "Point"
+          },
+          "id": "3759d3546c3e271aa39ad102d866d4a3"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548667,
+              25.039146
+            ],
+            "type": "Point"
+          },
+          "id": "392b8bfb104e1ce0dcbe8d8698f06fb1"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548083,
+              25.037352
+            ],
+            "type": "Point"
+          },
+          "id": "39b8662ee7bc22c59382f85aabf41942"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550634,
+              25.038055
+            ],
+            "type": "Point"
+          },
+          "id": "3a80e88dd8d95dae7c1422dfa3d24c01"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550137,
+              25.037613
+            ],
+            "type": "Point"
+          },
+          "id": "3a8d724ee4b46b74bedf209b54eeb68d"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548528,
+              25.038655
+            ],
+            "type": "Point"
+          },
+          "id": "3c052a65e9b442f6aa07cfcc1f8fa15a"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549061,
+              25.038957
+            ],
+            "type": "Point"
+          },
+          "id": "3c45e3a5b3765578e95c06a4189989ee"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549056,
+              25.039608
+            ],
+            "type": "Point"
+          },
+          "id": "3c6981a627bf614a45f361a27b7a66cd"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548571,
+              25.038711
+            ],
+            "type": "Point"
+          },
+          "id": "3d87cb8d5f4be21b0300ac35d8b93fc9"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548497,
+              25.037319
+            ],
+            "type": "Point"
+          },
+          "id": "3dfde865fe8af97c3ca2c6a929091510"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.54906,
+              25.039132
+            ],
+            "type": "Point"
+          },
+          "id": "3e236ec90933c045c713781872a31cba"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549301,
+              25.0386
+            ],
+            "type": "Point"
+          },
+          "id": "3eb734c0d5857121bbfcbc20331142db"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "indian beech tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549792,
+              25.039463
+            ],
+            "type": "Point"
+          },
+          "id": "3f8a94fc2351b2d6198ef44fbd910667"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.547981,
+              25.037497
+            ],
+            "type": "Point"
+          },
+          "id": "402d4bcdef04b26d4c99823f85a56ec6"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "indian beech tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550149,
+              25.039148
+            ],
+            "type": "Point"
+          },
+          "id": "41714d0077b1234ae9ac7ead8caade44"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "weeping fig"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549004,
+              25.037611
+            ],
+            "type": "Point"
+          },
+          "id": "41760f468b170404626e3a84792d5898"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.54862,
+              25.039145
+            ],
+            "type": "Point"
+          },
+          "id": "41998df1b6767bd4909e54d5026f75e6"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "hong kong orchid tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548474,
+              25.037651
+            ],
+            "type": "Point"
+          },
+          "id": "419fc69ca1da0af19b9f239cdc749b62"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548951,
+              25.038779
+            ],
+            "type": "Point"
+          },
+          "id": "427ee16ed4417cb7db77c8ac14a623a8"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "formosan gum"
+          },
+          "geometry": {
+            "coordinates": [
+              121.55015,
+              25.03928
+            ],
+            "type": "Point"
+          },
+          "id": "4296fc89af07fd60ff65e391b56933da"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.55164,
+              25.038026
+            ],
+            "type": "Point"
+          },
+          "id": "42bf70eb98f214d04870fe3fb6aa66d8"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548774,
+              25.039041
+            ],
+            "type": "Point"
+          },
+          "id": "43796f17f7645eab76f4cf994861174b"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "indian beech tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.551139,
+              25.03823
+            ],
+            "type": "Point"
+          },
+          "id": "445397ae8c2919ea3005f6c44dbe3a3c"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.54906,
+              25.039467
+            ],
+            "type": "Point"
+          },
+          "id": "4510b48c2da26a402568ac7127afa34c"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548525,
+              25.038387
+            ],
+            "type": "Point"
+          },
+          "id": "454221dc7484152c40813779fda50a55"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "indian beech tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550099,
+              25.039191
+            ],
+            "type": "Point"
+          },
+          "id": "4569a0413371b3e9e219cbd1299d0bbf"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548565,
+              25.039694
+            ],
+            "type": "Point"
+          },
+          "id": "460959a704f2fe049304ead8af7e469f"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549016,
+              25.039409
+            ],
+            "type": "Point"
+          },
+          "id": "4654508356a5ef595e0e82e1b01cc036"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549016,
+              25.039255
+            ],
+            "type": "Point"
+          },
+          "id": "47b031361946f0aefeeec34f855a4acf"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549885,
+              25.039228
+            ],
+            "type": "Point"
+          },
+          "id": "48db1c646e46e9c50c8ab4d9cce3905e"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548912,
+              25.04005
+            ],
+            "type": "Point"
+          },
+          "id": "493e9059db13a285934edc4edeaf3ea9"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548567,
+              25.039616
+            ],
+            "type": "Point"
+          },
+          "id": "49ae62f9e51fede2bd524cb16b87c778"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549015,
+              25.039858
+            ],
+            "type": "Point"
+          },
+          "id": "4a765bc65f30bbf5c41f6bde53cfb957"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549456,
+              25.03723
+            ],
+            "type": "Point"
+          },
+          "id": "4cc8c42cd5f615e9167160a70d1909a3"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548694,
+              25.039343
+            ],
+            "type": "Point"
+          },
+          "id": "4e2f325e41f4b5d515b91e14c3a51707"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "sacred garlic pear"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549262,
+              25.038406
+            ],
+            "type": "Point"
+          },
+          "id": "4e3c4c7958de7bdb26c381c2f8782688"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548524,
+              25.037201
+            ],
+            "type": "Point"
+          },
+          "id": "4ebdfc7f9256da6fedbeb140a5ed30e2"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550473,
+              25.038058
+            ],
+            "type": "Point"
+          },
+          "id": "4f3f6963230f4c666a0129e50418587d"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549108,
+              25.036849
+            ],
+            "type": "Point"
+          },
+          "id": "4f899ad157f84b9ef6505bef78b34dcb"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549448,
+              25.038147
+            ],
+            "type": "Point"
+          },
+          "id": "4ff927643878bfc29a07ff9d5dc058fa"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549063,
+              25.039293
+            ],
+            "type": "Point"
+          },
+          "id": "52250f57d41b27af3fea38ba7c9409a4"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548751,
+              25.038229
+            ],
+            "type": "Point"
+          },
+          "id": "5234b324d9568ee85d4a1e9b3bbc84cb"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550877,
+              25.038052
+            ],
+            "type": "Point"
+          },
+          "id": "53958db72dd4e8f577c4da342420ef02"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "indian beech tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.551182,
+              25.038185
+            ],
+            "type": "Point"
+          },
+          "id": "53c104bea8f9393ce13e2fa588f3390b"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "hong kong orchid tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549129,
+              25.037621
+            ],
+            "type": "Point"
+          },
+          "id": "5476beb29b26cdb3f543186be863767e"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548436,
+              25.038621
+            ],
+            "type": "Point"
+          },
+          "id": "54d81d20c650844f86507a655f4aecde"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549128,
+              25.039451
+            ],
+            "type": "Point"
+          },
+          "id": "55a31ae12cea1df4ebf51ef640402816"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549417,
+              25.038527
+            ],
+            "type": "Point"
+          },
+          "id": "55e2502c30ffb4bd249190f4c076d3ba"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548729,
+              25.038874
+            ],
+            "type": "Point"
+          },
+          "id": "57034d9c4138af4bc4ef348d9d9987fd"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550785,
+              25.038431
+            ],
+            "type": "Point"
+          },
+          "id": "5752dfbba1714007164118ccad642794"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548717,
+              25.039706
+            ],
+            "type": "Point"
+          },
+          "id": "577dd321133d6ede3d490df60b6b9908"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549011,
+              25.039008
+            ],
+            "type": "Point"
+          },
+          "id": "57de2d1ff1dff21225f40c01cdb0dd8a"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548732,
+              25.03973
+            ],
+            "type": "Point"
+          },
+          "id": "57e84c6af1bbb5ff6725e3a0586c220f"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549682,
+              25.039415
+            ],
+            "type": "Point"
+          },
+          "id": "58710832f933b42a83c7f43f4c061471"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548955,
+              25.039718
+            ],
+            "type": "Point"
+          },
+          "id": "59cc01905d07e9606ec539ad442d9846"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549709,
+              25.037538
+            ],
+            "type": "Point"
+          },
+          "id": "5aa19fc6f2e9ec3a9ac3b750eeeb21ee"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "weeping fig"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548738,
+              25.037548
+            ],
+            "type": "Point"
+          },
+          "id": "5b768870babc841dd3f702fe55d1e011"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549667,
+              25.037464
+            ],
+            "type": "Point"
+          },
+          "id": "5b7df9f46673121d245c6ef4d65c9023"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548457,
+              25.038348
+            ],
+            "type": "Point"
+          },
+          "id": "5bd582be4b16a93d0618e9e5e96f9c74"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549071,
+              25.039809
+            ],
+            "type": "Point"
+          },
+          "id": "5c2688645b866e5e71b58601d6d8e72e"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "hong kong orchid tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548538,
+              25.038102
+            ],
+            "type": "Point"
+          },
+          "id": "5c9220244e7a5f74bd56247e57101ca7"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "indian beech tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549969,
+              25.03931
+            ],
+            "type": "Point"
+          },
+          "id": "5d63e8052fb75329ba020ea7d7382994"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548743,
+              25.039553
+            ],
+            "type": "Point"
+          },
+          "id": "5f65dc03bec5797e0e033f8a2ec1e05d"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "indian beech tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549685,
+              25.039569
+            ],
+            "type": "Point"
+          },
+          "id": "5f916b54089922f8e0f856b67a1e26de"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550438,
+              25.039015
+            ],
+            "type": "Point"
+          },
+          "id": "5fc668d88ac4d15e435de3bf23c9e444"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548625,
+              25.039372
+            ],
+            "type": "Point"
+          },
+          "id": "626b0e9dc41a443cbc2026facf8357ab"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549056,
+              25.039217
+            ],
+            "type": "Point"
+          },
+          "id": "627b1c1e09c6ccd338bc18122cf2aeac"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548273,
+              25.03853
+            ],
+            "type": "Point"
+          },
+          "id": "63d03465903ad8785c011accaffcd334"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548031,
+              25.037425
+            ],
+            "type": "Point"
+          },
+          "id": "642a323cb8cf4d4742ea08b18b5d662f"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548532,
+              25.03703
+            ],
+            "type": "Point"
+          },
+          "id": "644da77c53d4187dd98b1b7efd4c101b"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "indian beech tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549373,
+              25.03984
+            ],
+            "type": "Point"
+          },
+          "id": "6718b54e69e4292a51e3b6a8b873928a"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "weeping fig"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549028,
+              25.0377
+            ],
+            "type": "Point"
+          },
+          "id": "6744b2e70ca4fe249b69d3c7423d07fa"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548777,
+              25.038983
+            ],
+            "type": "Point"
+          },
+          "id": "67d37a3880eba4a224627b35bd1eecd9"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548913,
+              25.039608
+            ],
+            "type": "Point"
+          },
+          "id": "6841efafcaabbe318a8f0c4b7fdbdc28"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549008,
+              25.03995
+            ],
+            "type": "Point"
+          },
+          "id": "68f1254918ad54cda248c66fb31aac78"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549135,
+              25.039317
+            ],
+            "type": "Point"
+          },
+          "id": "693fcc65bcabf379f030c8bd987ab238"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550994,
+              25.038246
+            ],
+            "type": "Point"
+          },
+          "id": "6a0fa3681bc1b2fcc0b0132182e18d80"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548004,
+              25.038219
+            ],
+            "type": "Point"
+          },
+          "id": "6a12604bf94015b3fdb42ba27c1c387d"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548623,
+              25.039311
+            ],
+            "type": "Point"
+          },
+          "id": "6aa2ba52f26b81df877d5ec67ccc6f35"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548897,
+              25.038797
+            ],
+            "type": "Point"
+          },
+          "id": "6ae00cc1f7728b29fbb3d7fce89e6c15"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549507,
+              25.037525
+            ],
+            "type": "Point"
+          },
+          "id": "6b42b56cd28aee089fccffe8980c3881"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549008,
+              25.039079
+            ],
+            "type": "Point"
+          },
+          "id": "6b97b39a984e2571d1f25761517db4be"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548565,
+              25.039368
+            ],
+            "type": "Point"
+          },
+          "id": "6cbad1311c174a9f8b8cf512d8aa28d1"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550199,
+              25.038063
+            ],
+            "type": "Point"
+          },
+          "id": "6d18f2c65efa6100b2c2c66d88a33234"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.5489,
+              25.039259
+            ],
+            "type": "Point"
+          },
+          "id": "6e9be335d23e109e0e7b3e8753129127"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548628,
+              25.038726
+            ],
+            "type": "Point"
+          },
+          "id": "6f06881cefd94731741a7f3f8d32574d"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.54913,
+              25.039626
+            ],
+            "type": "Point"
+          },
+          "id": "6fd9afd6b16fafaa03dfa962de47ae41"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549131,
+              25.038693
+            ],
+            "type": "Point"
+          },
+          "id": "718a43aede862de03f47fe6daf190695"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "indian beech tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.55056,
+              25.038761
+            ],
+            "type": "Point"
+          },
+          "id": "71fa9ab7347ee3dec90fd9609a213fd3"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "indian beech tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550202,
+              25.039101
+            ],
+            "type": "Point"
+          },
+          "id": "721cb580cfca8eee2c5abb1b82f7859e"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549026,
+              25.038864
+            ],
+            "type": "Point"
+          },
+          "id": "738fc9fc14fe72e46fd44bd51a47a48d"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548325,
+              25.037142
+            ],
+            "type": "Point"
+          },
+          "id": "74192f72791aef2b652aa5482b2b3139"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "sacred garlic pear"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548088,
+              25.038135
+            ],
+            "type": "Point"
+          },
+          "id": "74d977e3201f289a200c653acdb7525a"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549059,
+              25.039408
+            ],
+            "type": "Point"
+          },
+          "id": "754e0bdf86c9722c1d8f17dc2879c5e9"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548957,
+              25.03929
+            ],
+            "type": "Point"
+          },
+          "id": "770e3639792ce9c5038a45b3c3577d79"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549126,
+              25.038898
+            ],
+            "type": "Point"
+          },
+          "id": "7732a832079e1680096ff482c302f014"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548915,
+              25.039816
+            ],
+            "type": "Point"
+          },
+          "id": "77488b89f5bd390efde95d070f5a395a"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "indian beech tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550624,
+              25.038701
+            ],
+            "type": "Point"
+          },
+          "id": "777a11d0528fc7bee889e3700cc53c32"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548787,
+              25.039703
+            ],
+            "type": "Point"
+          },
+          "id": "780be4c6e335eff10c734fc4d64a6ea2"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550961,
+              25.038052
+            ],
+            "type": "Point"
+          },
+          "id": "78bced109e16de09dcaef0af1733d489"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.5489,
+              25.039349
+            ],
+            "type": "Point"
+          },
+          "id": "78c1b4cdd929fad029b3f51a7b2fb525"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548775,
+              25.03893
+            ],
+            "type": "Point"
+          },
+          "id": "7a01e2cdc5b03d48db509ec3b2f16ae4"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549131,
+              25.039513
+            ],
+            "type": "Point"
+          },
+          "id": "7a6cc511866942fcc232ddf83dd01bec"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549557,
+              25.037332
+            ],
+            "type": "Point"
+          },
+          "id": "7bb2ae200712fe1a5952e8ec7c2cbdf1"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549552,
+              25.039543
+            ],
+            "type": "Point"
+          },
+          "id": "7c23de8df3a3fbf63cd3074ab6da0190"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549137,
+              25.0398
+            ],
+            "type": "Point"
+          },
+          "id": "7cba079376cc2b24f77fad0e7707feec"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548671,
+              25.039524
+            ],
+            "type": "Point"
+          },
+          "id": "7e3ecd91ce0b2b06b26f1acec0b86abc"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548958,
+              25.040299
+            ],
+            "type": "Point"
+          },
+          "id": "7ec80bd8ad3a6e12019089fe9ea20bdf"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550542,
+              25.038921
+            ],
+            "type": "Point"
+          },
+          "id": "7fe720da35c8630c442ef9e6bed394ed"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550482,
+              25.038963
+            ],
+            "type": "Point"
+          },
+          "id": "80ba576ad57d1e7848e191cbe28a82b2"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.55072,
+              25.038053
+            ],
+            "type": "Point"
+          },
+          "id": "80d0b4cfe909dc30a9a3c17f7466c23f"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549791,
+              25.038089
+            ],
+            "type": "Point"
+          },
+          "id": "80f6f88e7611c98b65802e2dba81d909"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "indian beech tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549422,
+              25.0398
+            ],
+            "type": "Point"
+          },
+          "id": "81af3c26910aa1f733a9f2c2296acc74"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548697,
+              25.039633
+            ],
+            "type": "Point"
+          },
+          "id": "82edc32901eba47eab8e0b4b0d7b11c4"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548388,
+              25.037254
+            ],
+            "type": "Point"
+          },
+          "id": "841096cf2fb073cfc8d2740ea26f2bd8"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549059,
+              25.039947
+            ],
+            "type": "Point"
+          },
+          "id": "8436e3238229fbf678e856074194d089"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "indian beech tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550695,
+              25.038643
+            ],
+            "type": "Point"
+          },
+          "id": "8542f48fba88054fd14ce6b449e18720"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550262,
+              25.038063
+            ],
+            "type": "Point"
+          },
+          "id": "85b2ba11744def116ec987890e942654"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.551221,
+              25.038292
+            ],
+            "type": "Point"
+          },
+          "id": "8747654cc22f5b9c0e6402dc7c486080"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.551072,
+              25.038166
+            ],
+            "type": "Point"
+          },
+          "id": "87c517a5dd3025c9f2179017c254b306"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548785,
+              25.039266
+            ],
+            "type": "Point"
+          },
+          "id": "88051c7e943cd6d849da537ea14bd86f"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548907,
+              25.039409
+            ],
+            "type": "Point"
+          },
+          "id": "880e587ecf726d9bc4cc28a5dfe69887"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "indian beech tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549744,
+              25.03951
+            ],
+            "type": "Point"
+          },
+          "id": "8a665c81371568a6abaec30f1fdbf0d9"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548102,
+              25.038377
+            ],
+            "type": "Point"
+          },
+          "id": "8a6f33e58d5f2aa108ba73377ba35bbe"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "indian beech tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.55074,
+              25.038593
+            ],
+            "type": "Point"
+          },
+          "id": "8ac462d069a5ca56be71c0c7ad428423"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549614,
+              25.038323
+            ],
+            "type": "Point"
+          },
+          "id": "8b9153afb9ded04e8a42804d98a0ab4c"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548774,
+              25.038729
+            ],
+            "type": "Point"
+          },
+          "id": "8c6179b20c8ad29204e6486a287bcdbe"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549065,
+              25.039902
+            ],
+            "type": "Point"
+          },
+          "id": "8c789556870136c6d44da02762afe481"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548619,
+              25.039668
+            ],
+            "type": "Point"
+          },
+          "id": "8d0c647a91f2119ec09494dd75b27a7f"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549148,
+              25.038292
+            ],
+            "type": "Point"
+          },
+          "id": "8e7534dcddc92989875acedb22035616"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549129,
+              25.039569
+            ],
+            "type": "Point"
+          },
+          "id": "8efc57f332c5f878f4f3ed57c04cfe08"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549196,
+              25.037079
+            ],
+            "type": "Point"
+          },
+          "id": "9040a88a0fdff1b8beac06a9cf9b5ca2"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.54913,
+              25.039008
+            ],
+            "type": "Point"
+          },
+          "id": "929808759ad7b5151945d0203395612e"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548914,
+              25.039716
+            ],
+            "type": "Point"
+          },
+          "id": "92df82dfd86ab68e85d4153893bb27c5"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550797,
+              25.038053
+            ],
+            "type": "Point"
+          },
+          "id": "9355af1d86e048d63eddf541140adbb2"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549063,
+              25.040297
+            ],
+            "type": "Point"
+          },
+          "id": "949464f569f4ef16f442d13eb53f933b"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549382,
+              25.039698
+            ],
+            "type": "Point"
+          },
+          "id": "94b3bbf8e40b5d4c81bebdda301525ba"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550585,
+              25.038616
+            ],
+            "type": "Point"
+          },
+          "id": "9509beb114570927a155e2de9f349fd1"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550718,
+              25.038488
+            ],
+            "type": "Point"
+          },
+          "id": "951789023da3e91c4a1cbfb62044d31c"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549001,
+              25.03922
+            ],
+            "type": "Point"
+          },
+          "id": "969de3a61d259188cf7442be662bc519"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.54875,
+              25.039479
+            ],
+            "type": "Point"
+          },
+          "id": "97554f9d1aeaa2b644d10e2615cacba4"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550311,
+              25.038874
+            ],
+            "type": "Point"
+          },
+          "id": "991168de99ed3b93ecc3f44cd0bf7697"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548422,
+              25.03782
+            ],
+            "type": "Point"
+          },
+          "id": "9aa5412ea7fc5bb72dbc9e0db200337f"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549556,
+              25.038396
+            ],
+            "type": "Point"
+          },
+          "id": "9aeae04d6dd0a47f3fff287de6aece91"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549443,
+              25.03964
+            ],
+            "type": "Point"
+          },
+          "id": "9b407af659f0b7f6a7430acaed7984a9"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549598,
+              25.039502
+            ],
+            "type": "Point"
+          },
+          "id": "9bbdeaef61f2c138633dff8832319fc9"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550196,
+              25.038961
+            ],
+            "type": "Point"
+          },
+          "id": "9c74f4d223ff27a40a4a957bc47bd732"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549125,
+              25.039692
+            ],
+            "type": "Point"
+          },
+          "id": "9d96540563895a2523956434a9863fa6"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548955,
+              25.039901
+            ],
+            "type": "Point"
+          },
+          "id": "9dbe3a0eed17087b427bedd8f2419dba"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549866,
+              25.037618
+            ],
+            "type": "Point"
+          },
+          "id": "9ddebd19ae825f8fb26a91d06aed22fb"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "indian beech tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.551095,
+              25.038272
+            ],
+            "type": "Point"
+          },
+          "id": "9fffe7badaf2a9da71ec27e2d16ded27"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548909,
+              25.039857
+            ],
+            "type": "Point"
+          },
+          "id": "a10c6ad39c6aea598fbe8d4f22714b5c"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549456,
+              25.037639
+            ],
+            "type": "Point"
+          },
+          "id": "a279ccb2bbd0f9227e978c5b5f31c662"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548519,
+              25.038298
+            ],
+            "type": "Point"
+          },
+          "id": "a2dd8b46f416f04b7134707886443790"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550129,
+              25.039025
+            ],
+            "type": "Point"
+          },
+          "id": "a3a923f796ab627229a8ded8744b40ea"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550591,
+              25.038872
+            ],
+            "type": "Point"
+          },
+          "id": "a4c5d2e0ec028d7c492144dbf816df01"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "hong kong orchid tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549147,
+              25.037989
+            ],
+            "type": "Point"
+          },
+          "id": "a5a7238c3a1b90eeb37a24e4ee0534bf"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549008,
+              25.040194
+            ],
+            "type": "Point"
+          },
+          "id": "a5b52f2c4c5590fa56127e34a98be01d"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548944,
+              25.039349
+            ],
+            "type": "Point"
+          },
+          "id": "a6f8b3c372e35807b0d863abcd20f371"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548697,
+              25.038726
+            ],
+            "type": "Point"
+          },
+          "id": "a71173d4ff01c963c7e11595a7d112c0"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.55037,
+              25.038827
+            ],
+            "type": "Point"
+          },
+          "id": "a8097cc18310c00d2d743e616cfbb0a7"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550003,
+              25.039123
+            ],
+            "type": "Point"
+          },
+          "id": "aa304b79c2c7b4bcca6c02336a66728b"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548898,
+              25.038869
+            ],
+            "type": "Point"
+          },
+          "id": "aafd966f9d4c1fbd17bff610b5576090"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549,
+              25.040371
+            ],
+            "type": "Point"
+          },
+          "id": "ad55a9d4a2268a9a986e55c9dbc1429d"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549221,
+              25.040121
+            ],
+            "type": "Point"
+          },
+          "id": "ad8971c0ba4b4944f33ba3add361c6d7"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548918,
+              25.040231
+            ],
+            "type": "Point"
+          },
+          "id": "adc3918b161ebcfcefe6fe58ae30a9c1"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "frangipani tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550397,
+              25.03892
+            ],
+            "type": "Point"
+          },
+          "id": "ae69f17ad04d8aa35055363aa93f4581"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550929,
+              25.038299
+            ],
+            "type": "Point"
+          },
+          "id": "aec0dec8415aff4ca0cbdfb669ab8dd2"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549023,
+              25.037517
+            ],
+            "type": "Point"
+          },
+          "id": "af683ea7decf0304648013657c8da92a"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550695,
+              25.038774
+            ],
+            "type": "Point"
+          },
+          "id": "b00f7794da83a7e4f36db9766152f914"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548777,
+              25.039623
+            ],
+            "type": "Point"
+          },
+          "id": "b20a1b12027106ec076c3d5475725070"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549537,
+              25.039843
+            ],
+            "type": "Point"
+          },
+          "id": "b3fe182c7d5a042a781ef11fa3485d0b"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548571,
+              25.039515
+            ],
+            "type": "Point"
+          },
+          "id": "b417f7ba0afe9513a9ac67a05231be58"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "weeping fig"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548574,
+              25.037617
+            ],
+            "type": "Point"
+          },
+          "id": "b4fb7e04cca58977e06f34c9b629049c"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549944,
+              25.038073
+            ],
+            "type": "Point"
+          },
+          "id": "b5695054a4100bf2039e691f259a9e78"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548908,
+              25.039901
+            ],
+            "type": "Point"
+          },
+          "id": "b5fe47bed048613ce42c235993d3455a"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549464,
+              25.039917
+            ],
+            "type": "Point"
+          },
+          "id": "b677b6bc152fa40ffc9d66a3a4b0a007"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550278,
+              25.03916
+            ],
+            "type": "Point"
+          },
+          "id": "b6c23c19488b7e1e0afbc9501fadf5c3"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549061,
+              25.03935
+            ],
+            "type": "Point"
+          },
+          "id": "b749d4a1807404e07fae8a69c58f479f"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.547795,
+              25.038091
+            ],
+            "type": "Point"
+          },
+          "id": "b7a35215ecaf6a83c3bf8cd54de16f2d"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548956,
+              25.039951
+            ],
+            "type": "Point"
+          },
+          "id": "b7c4088c721d28c6ca99e5a8379492bb"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549435,
+              25.038039
+            ],
+            "type": "Point"
+          },
+          "id": "b88fbe8013734e67bafcc11fac9a06b8"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549127,
+              25.038808
+            ],
+            "type": "Point"
+          },
+          "id": "b8e3ded42377d3ebc9fcfcd3c7ebb630"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.54932,
+              25.040031
+            ],
+            "type": "Point"
+          },
+          "id": "b8ec696d08df0db66faed30b12f8d442"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550998,
+              25.038498
+            ],
+            "type": "Point"
+          },
+          "id": "bb165bc21fd5162cc0c2f213e7982446"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "weeping fig"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549016,
+              25.037652
+            ],
+            "type": "Point"
+          },
+          "id": "bb18794e64daa5a6e3d11d10a70fd827"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548925,
+              25.04
+            ],
+            "type": "Point"
+          },
+          "id": "bbe10f5823d16025186bf2625e932cc7"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548746,
+              25.039406
+            ],
+            "type": "Point"
+          },
+          "id": "bc75aae98497cc8b9ea0b06b30dacf73"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "hong kong orchid tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549185,
+              25.037844
+            ],
+            "type": "Point"
+          },
+          "id": "bce124e9b6cb70c21c79f0cff5ac5a40"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549008,
+              25.040233
+            ],
+            "type": "Point"
+          },
+          "id": "be20d612d62b3784499ed33c049c2f9d"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549385,
+              25.037181
+            ],
+            "type": "Point"
+          },
+          "id": "be4115cbbbbf2906a987b00b8ea3827a"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549258,
+              25.039801
+            ],
+            "type": "Point"
+          },
+          "id": "bf5ab31dfbc845a6f11d9b7cfff1579e"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548626,
+              25.038872
+            ],
+            "type": "Point"
+          },
+          "id": "bfc143d48817612cc5db911f5aae040a"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549322,
+              25.039749
+            ],
+            "type": "Point"
+          },
+          "id": "bfd0d64abee4f3f3e1f2017b3daa5562"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "indian beech tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549597,
+              25.039652
+            ],
+            "type": "Point"
+          },
+          "id": "c10a4f457fe51a7bd02218e8e8c45e20"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549281,
+              25.040074
+            ],
+            "type": "Point"
+          },
+          "id": "c1c3d0513d471834436fcdca70983c6d"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "indian beech tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550788,
+              25.03855
+            ],
+            "type": "Point"
+          },
+          "id": "c287bbb38d4d9087ece076aed5a34e97"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549734,
+              25.039374
+            ],
+            "type": "Point"
+          },
+          "id": "c32e2ac243be6f685b35702ccb0c07b0"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549004,
+              25.039132
+            ],
+            "type": "Point"
+          },
+          "id": "c38e5f2b988b593e74d93376ba486882"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.547663,
+              25.038095
+            ],
+            "type": "Point"
+          },
+          "id": "c39421758e57c5f23f23d3888d1fe41a"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549048,
+              25.038796
+            ],
+            "type": "Point"
+          },
+          "id": "c475f8527f89fb20ce666424d4d1cd3e"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549112,
+              25.037013
+            ],
+            "type": "Point"
+          },
+          "id": "c4cd62713032add42413429db49d6b40"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548146,
+              25.037284
+            ],
+            "type": "Point"
+          },
+          "id": "c507149765b8f531352b60157da22c31"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548436,
+              25.037082
+            ],
+            "type": "Point"
+          },
+          "id": "c51ce8278480c5020ac723df1166db02"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549135,
+              25.039254
+            ],
+            "type": "Point"
+          },
+          "id": "c58373e35160b70e97cd507d07b08ac5"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.54901,
+              25.039903
+            ],
+            "type": "Point"
+          },
+          "id": "c58670189dad243b424eba38a4c9e0e5"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "hong kong orchid tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548538,
+              25.037575
+            ],
+            "type": "Point"
+          },
+          "id": "c63c6654f3d36b081e7c862c4d00fdbc"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "indian beech tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549537,
+              25.0397
+            ],
+            "type": "Point"
+          },
+          "id": "c64dfb41c281f6c206827e828bcd36d3"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550843,
+              25.038384
+            ],
+            "type": "Point"
+          },
+          "id": "c7c4304a8015526a07a93e249bb7e7b6"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548894,
+              25.03919
+            ],
+            "type": "Point"
+          },
+          "id": "cb003adf6036175a8cce9920dcd0608c"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549791,
+              25.039597
+            ],
+            "type": "Point"
+          },
+          "id": "cb62887a5f0a0dc280d01dc19927ec3a"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549579,
+              25.039804
+            ],
+            "type": "Point"
+          },
+          "id": "cbfddc0877b83a687c508c26ad1398b1"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550646,
+              25.038824
+            ],
+            "type": "Point"
+          },
+          "id": "cc5a641a9e9d124e8235260dd23fa7c7"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548968,
+              25.039609
+            ],
+            "type": "Point"
+          },
+          "id": "cc806d35b728b198554f60e7a2d199e3"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549147,
+              25.037215
+            ],
+            "type": "Point"
+          },
+          "id": "cc9874e6354e3ab35a9c64167c1822fa"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548891,
+              25.039156
+            ],
+            "type": "Point"
+          },
+          "id": "cf1d869c4a1c9aaaa6960ddc197a15e4"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549729,
+              25.039658
+            ],
+            "type": "Point"
+          },
+          "id": "d0d959a116c0b9249760d2f96f1a3e0f"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550333,
+              25.03911
+            ],
+            "type": "Point"
+          },
+          "id": "d11d81560821a804affe2d923607ae0f"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548954,
+              25.038865
+            ],
+            "type": "Point"
+          },
+          "id": "d1ce7d2ff7bf958e1b63ce4421300827"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548532,
+              25.036927
+            ],
+            "type": "Point"
+          },
+          "id": "d1e06481f3e94771422c9113fce2d255"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548733,
+              25.039096
+            ],
+            "type": "Point"
+          },
+          "id": "d37ed982f6aa726949593fe3755d201f"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549006,
+              25.040298
+            ],
+            "type": "Point"
+          },
+          "id": "d4b7c26ac80af0d2ef8e3545114b14fe"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "weeping fig"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549025,
+              25.037834
+            ],
+            "type": "Point"
+          },
+          "id": "d4f59a2fc1130c9dfb3530062182f866"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548623,
+              25.03948
+            ],
+            "type": "Point"
+          },
+          "id": "d66a7c6175e0a95b28b8740379d87a32"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548976,
+              25.039768
+            ],
+            "type": "Point"
+          },
+          "id": "d69b83b669ab99ce7add497546d2e802"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "weeping fig"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548987,
+              25.037566
+            ],
+            "type": "Point"
+          },
+          "id": "d7b0e61d61038b9fa1147c420af729a0"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.54903,
+              25.039526
+            ],
+            "type": "Point"
+          },
+          "id": "d7f01ffefe8e5d6ef09428ce04d68811"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.54835,
+              25.038576
+            ],
+            "type": "Point"
+          },
+          "id": "d9527b44b96a154eb5a1a67852217ba6"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.547941,
+              25.037575
+            ],
+            "type": "Point"
+          },
+          "id": "d9bfcf08a6ccaa3359f7c3ccf42c6429"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.551551,
+              25.038025
+            ],
+            "type": "Point"
+          },
+          "id": "da243da97346caecf8cedd50c152dc82"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "formosan gum"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550024,
+              25.03939
+            ],
+            "type": "Point"
+          },
+          "id": "db875d279bcd3bd56c937dc941dbe959"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549603,
+              25.037601
+            ],
+            "type": "Point"
+          },
+          "id": "dbc2e7434f1951b070668099a6046fc2"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "formosan gum"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550208,
+              25.03922
+            ],
+            "type": "Point"
+          },
+          "id": "dc8367cf52fff670aa8637703d6ac95f"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "taiwan cherry"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549343,
+              25.039867
+            ],
+            "type": "Point"
+          },
+          "id": "dca3421c98ba64cdd04448d186de6011"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "indian beech tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550977,
+              25.038381
+            ],
+            "type": "Point"
+          },
+          "id": "dd0f88c612ecc48fd14c33f919a5c7d5"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "hong kong orchid tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548757,
+              25.038157
+            ],
+            "type": "Point"
+          },
+          "id": "dec7295323265affb0f3730233c92dc0"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549733,
+              25.037611
+            ],
+            "type": "Point"
+          },
+          "id": "df7d5e44261d49d6929da9b0dfcbc7b1"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548622,
+              25.039263
+            ],
+            "type": "Point"
+          },
+          "id": "dfd63962f14c77116d26b5f635514590"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549019,
+              25.039812
+            ],
+            "type": "Point"
+          },
+          "id": "e02ff00295773f16daf991bbe8feaaab"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "weeping fig"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548686,
+              25.037563
+            ],
+            "type": "Point"
+          },
+          "id": "e065c2f4ebd5ebe780df11fe638cf575"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548674,
+              25.039459
+            ],
+            "type": "Point"
+          },
+          "id": "e072692b1497bad38f9c115c14f22b1c"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548556,
+              25.039099
+            ],
+            "type": "Point"
+          },
+          "id": "e0cd4346dfffc127c82b5fe1ca2ad5d4"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549948,
+              25.039176
+            ],
+            "type": "Point"
+          },
+          "id": "e15faa74aa9988f723e553840226fa97"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548703,
+              25.038797
+            ],
+            "type": "Point"
+          },
+          "id": "e28465463c99c575d7599068f1184482"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548697,
+              25.039045
+            ],
+            "type": "Point"
+          },
+          "id": "e3f0955220b4db4f3ee2b678733f16b9"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548905,
+              25.039463
+            ],
+            "type": "Point"
+          },
+          "id": "e457c972eb7531af069b6f3415835ccd"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548532,
+              25.036852
+            ],
+            "type": "Point"
+          },
+          "id": "e46a8b425fa4d2d8527c32e590540a64"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.54964,
+              25.039458
+            ],
+            "type": "Point"
+          },
+          "id": "e4a7c4d68a3a96c2a8976176e5013e63"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "indian beech tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550247,
+              25.039056
+            ],
+            "type": "Point"
+          },
+          "id": "e55d8830ef7dd2cb96eda4b26c7ff715"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "hong kong orchid tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548438,
+              25.037715
+            ],
+            "type": "Point"
+          },
+          "id": "e6898b01db359f592fd3fcb71c4a0aa0"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549784,
+              25.039326
+            ],
+            "type": "Point"
+          },
+          "id": "e825b434e5b39f1a504ab39b1078ab6c"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.547901,
+              25.037644
+            ],
+            "type": "Point"
+          },
+          "id": "e990a63436da0a86c349d5526a00ed2e"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "weeping fig"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549037,
+              25.037744
+            ],
+            "type": "Point"
+          },
+          "id": "e9e9d3ded1e753f8f1aa6c921052775f"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548426,
+              25.037898
+            ],
+            "type": "Point"
+          },
+          "id": "eaf5e19f06543a199795e737f673d79b"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548937,
+              25.040333
+            ],
+            "type": "Point"
+          },
+          "id": "eb22274520cacd6c5bb6dc254a114962"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549135,
+              25.040256
+            ],
+            "type": "Point"
+          },
+          "id": "eb4a21b038d1aa3b2511656f5e7a30fd"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549311,
+              25.038093
+            ],
+            "type": "Point"
+          },
+          "id": "ecb693972a18d6f89c44b62c695f50f4"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548237,
+              25.038166
+            ],
+            "type": "Point"
+          },
+          "id": "ed122a9f2db848a6ca724345bf357523"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "weeping fig"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549006,
+              25.03791
+            ],
+            "type": "Point"
+          },
+          "id": "ed6a3754da8bde438958c441f9d4e9bc"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550126,
+              25.038066
+            ],
+            "type": "Point"
+          },
+          "id": "ee5eaefecdaefbf50df9083fad1aab3d"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "weeping fig"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548626,
+              25.037592
+            ],
+            "type": "Point"
+          },
+          "id": "f01b6e62cc60f0dbd5a618505e766ec1"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "hong kong orchid tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548463,
+              25.038
+            ],
+            "type": "Point"
+          },
+          "id": "f0e17b45f263b0f877b8f28dd03d795d"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "indian beech tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.551027,
+              25.038335
+            ],
+            "type": "Point"
+          },
+          "id": "f1c9eabdd068d8940606fb1bcf99b9d7"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548623,
+              25.039595
+            ],
+            "type": "Point"
+          },
+          "id": "f1dc151a61e430d809a215c66dfa6b52"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548559,
+              25.039178
+            ],
+            "type": "Point"
+          },
+          "id": "f1f357c1ba609eb19437297a2126dc21"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.551063,
+              25.038439
+            ],
+            "type": "Point"
+          },
+          "id": "f2d378baeaf60d31eade92af82a5f416"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550063,
+              25.038068
+            ],
+            "type": "Point"
+          },
+          "id": "f56975cb1168ad0861e7c8bf5cd1c157"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.54869,
+              25.039703
+            ],
+            "type": "Point"
+          },
+          "id": "f5b0692e623d27c043a6f52bfdcaf7c3"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548777,
+              25.038874
+            ],
+            "type": "Point"
+          },
+          "id": "f63b23911cce618addee64dd3e0ecab7"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548191,
+              25.037579
+            ],
+            "type": "Point"
+          },
+          "id": "f6c8dd27720e83cdb910f768cedbb69f"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "weeping fig"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549019,
+              25.037873
+            ],
+            "type": "Point"
+          },
+          "id": "f71259b0842352b2e3cc8d79d14d9e06"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549106,
+              25.036917
+            ],
+            "type": "Point"
+          },
+          "id": "f7830563e3e43ae1fdc0e2d67c664d6a"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550875,
+              25.038474
+            ],
+            "type": "Point"
+          },
+          "id": "f8f53fa41414b6c10c4076ab00d0344d"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "bishop wood"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550817,
+              25.038667
+            ],
+            "type": "Point"
+          },
+          "id": "f906560e50fe77dec7baa914358991f2"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.54896,
+              25.040195
+            ],
+            "type": "Point"
+          },
+          "id": "f9b26e7d17b6546238e5a8518663e68b"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "indian beech tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549505,
+              25.039728
+            ],
+            "type": "Point"
+          },
+          "id": "fc169ab7a0399c548459659d4eab04e6"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548039,
+              25.038289
+            ],
+            "type": "Point"
+          },
+          "id": "fd3997127443637bc5b0c0c0e52a22ed"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.549053,
+              25.039763
+            ],
+            "type": "Point"
+          },
+          "id": "fd954787705c45efe5ead29d36272bae"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "flamboyant"
+          },
+          "geometry": {
+            "coordinates": [
+              121.550257,
+              25.037608
+            ],
+            "type": "Point"
+          },
+          "id": "fe23a2f64834d5d915f2dc997447d71e"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "camphor tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548674,
+              25.038873
+            ],
+            "type": "Point"
+          },
+          "id": "ff12f0bdd8a09aa712df7175de1fc3d0"
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "icon": "banyan tree"
+          },
+          "geometry": {
+            "coordinates": [
+              121.548292,
+              25.03809
+            ],
+            "type": "Point"
+          },
+          "id": "ffa39af15489956cce3d9bf742d2c39a"
+        }
+      ],
+    };
+
+    var filterGroup = document.getElementById('filter-group');
+
+    map.on('load', function() {
+    // Add a GeoJSON source containing place coordinates and information.
+      map.addSource('places',{'type': 'geojson','data': places});
+      places.features.forEach(function(feature) {
+        var symbol = feature.properties['icon'];
+        var layerID = 'poi-' + symbol;
+
+        // Add a layer for this symbol type if it hasn't been added already.
+        if (!map.getLayer(layerID)) {
+            map.addLayer({'id': layerID,
+                          'type': 'symbol',
+                          'source': 'places',
+                          'layout': {'icon-image': symbol + '-15',
+                                                  'icon-allow-overlap': true},
+                          'filter': ['==', 'icon', symbol]
+                         });
+
+            // Add checkbox and label elements for the layer.
+            var input = document.createElement('input');
+            input.type = 'checkbox';
+            input.id = layerID;
+            input.checked = true;
+            filterGroup.appendChild(input);
+
+            var label = document.createElement('label');
+            label.setAttribute('for', layerID);
+            label.textContent = symbol;
+            filterGroup.appendChild(label);
+
+            // When the checkbox changes, update the visibility of the layer.
+            input.addEventListener('change',
+                                    function(e) {map.setLayoutProperty(layerID,
+                                                                       'visibility',
+                                                                       e.target.checked ? 'visible' : 'none');});
+
+
+            // Create a popup, but don't add it to the map yet.
+            var popup = new mapboxgl.Popup({closeButton: false,closeOnClick: false});
+
+            map.on('mouseenter', layerID, function(e) {
+            // Change the cursor style as a UI indicator.
+            map.getCanvas().style.cursor = 'pointer';
+
+            var coordinates = e.features[0].geometry.coordinates.slice();
+            var description = e.features[0].properties.icon;
+
+
+            // Ensure that if the map is zoomed out such that multiple
+            // copies of the feature are visible, the popup appears
+            // over the copy being pointed to.
+            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+          }
+
+            // Populate the popup and set its coordinates
+            // based on the feature found.
+            popup
+            .setLngLat(coordinates)
+            .setHTML(description)
+            .addTo(map)
+            });
+
+            // When a click event occurs on a feature in the places layer, open a popup at the
+            // location of the feature, with description HTML from its properties.
+            map.on('click', layerID, function(e) {
+              var description = e.features[0].properties.icon;
+              var result = description + ".html"
+              window.open(result);
+            });
+
+            map.on('mouseleave', layerID, function() {
+            map.getCanvas().style.cursor = '';
+            popup.remove();
+            });
+
+
+           }
+          });});
+
+
+
+  </script>
+
+</body>
+</html>
