@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='utf-8' />
+  <title>Taipei Street Tree</title>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css' rel='stylesheet' />
+
+  <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.2.0/mapbox-gl-geocoder.min.js'></script>
+  <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.2.0/mapbox-gl-geocoder.css' type='text/css' />
+  <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    #map {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+    }
+
+    .mapboxgl-popup-content{
+      font-weight: bold;
+      text-transform:capitalize;
+    }
+
+  </style>
+</head>
+<body>
+  <style>
+    .filter-group {
+    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-weight: 500;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    border-radius: 3px;
+    width: 180px;
+    }
+
+    .filter-group input[type='checkbox']:first-child + label {
+    border-radius: 3px 3px 0 0;
+    }
+
+    .filter-group label:last-child {
+    border-radius: 0 0 3px 3px;
+    border: none;
+    }
+
+    .filter-group input[type='checkbox'] {
+    display: none;
+    }
+
+    .filter-group input[type='checkbox'] + label {
+    background-color: grey;
+    display: block;
+    cursor: pointer;
+    padding: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    }
+
+    .filter-group input[type='checkbox'] + label {
+    background-color: grey;
+    text-transform: capitalize;
+    }
+
+    .filter-group input[type='checkbox'] + label:hover,
+    .filter-group input[type='checkbox']:checked + label {
+    background-color: white;
+    }
+
+    .filter-group input[type='checkbox']:checked + label:before {
+    content: '●';
+    margin-right: 5px;
+    }
+  </style>
+
+  <div id='map'></div>
+
+  <nav id="filter-group" class="filter-group"></nav>
+
+  <script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoiaGV5ZGFuaWVsdHNhaSIsImEiOiJjazhlMGMwbTAxMDNkM21vNTl5dGtzMnVtIn0.c-f8dLi-F8hergaKDRF6sg';
+
+    var map = new mapboxgl.Map({
+      container: 'map', // Specify the container ID
+      style: 'mapbox://styles/heydanieltsai/ck8e0hyc7455t1ik9ihjsseuk', // Specify which map style to use
+      center: [121.548613, 25.039264], // Specify the starting position [lng, lat]
+      zoom: 12 // Specify the starting zoom
+    });
+
+    //the search bar
+    map.on('load', function() {
+      var geocoder = new MapboxGeocoder({ // Initialize the geocoder
+        accessToken: mapboxgl.accessToken, // Set the access token
+        mapboxgl: mapboxgl, // Set the mapbox-gl instance
+        zoom: 13, // Set the zoom level for geocoding results
+        placeholder: "Enter an address or place name", // This placeholder text will display in the search bar
+        bbox: [] // Set a bounding box
+      });
+      // Add the geocoder to the map
+      map.addControl(geocoder, 'top-left'); // Add the search box to the top left
+    });
+
+    var places =
+      {'type': 'FeatureCollection',
+                'features': [
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "banyan tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548106,
+                        25.037513
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "04e66a0c58da2883b0aa5bf1852c8dbd"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548786,
+                        25.039406
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "05a07eee2b368344b19ec7a8acc8f14c"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "banyan tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.549259,
+                        25.037285
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "05a3cd0aec1c6ba3031331e71de5b767"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "banyan tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.549161,
+                        25.038401
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "08a2c8d598e41b79aaeb3b30a060e7df"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548694,
+                        25.038987
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "0a478331c3aab74fc2b78a07dc911b37"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548776,
+                        25.038797
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "0aa4b790ad0d881a1146e8ff24db77e6"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "flamboyant"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548148,
+                        25.038432
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "0fad5af9dabc8c043ccf8978d7008b10"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548672,
+                        25.039098
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "122350fd3b8350b86f266ff229a039b6"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "banyan tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.54806,
+                        25.037636
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "15748c24d8faff52af2b1cdbf09c056f"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548785,
+                        25.039322
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "18cc1b102a61f7a0b3443fb5bbd38688"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "banyan tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548166,
+                        25.038076
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "25164ad3bbb3aeb444fc69ff38f9489b"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "flamboyant"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.547888,
+                        25.038091
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "2649e2468e3831238789ea53e0124c7a"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "banyan tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.549265,
+                        25.038329
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "27d34fcc9724a59fa20c4b9103d69f59"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "flamboyant"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548199,
+                        25.038484
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "298a351d54ffe1601bd2b7c0b3a7aab7"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548618,
+                        25.039096
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "2c5adb31726bb6ae5068abf2b17d4a8c"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548786,
+                        25.039207
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "341d643f0b1cf6146bb9d11127696809"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "banyan tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.549143,
+                        25.037362
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "3507057ed7dea8b148b3f3c68f9dec5c"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.54862,
+                        25.039201
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "3759d3546c3e271aa39ad102d866d4a3"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548667,
+                        25.039146
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "392b8bfb104e1ce0dcbe8d8698f06fb1"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "flamboyant"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548528,
+                        25.038655
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "3c052a65e9b442f6aa07cfcc1f8fa15a"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "flamboyant"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548571,
+                        25.038711
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "3d87cb8d5f4be21b0300ac35d8b93fc9"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "banyan tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548512,
+                        25.037348
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "3dfde865fe8af97c3ca2c6a929091510"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.54862,
+                        25.039145
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "41998df1b6767bd4909e54d5026f75e6"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548774,
+                        25.039041
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "43796f17f7645eab76f4cf994861174b"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "banyan tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548525,
+                        25.038387
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "454221dc7484152c40813779fda50a55"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "banyan tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548565,
+                        25.039694
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "460959a704f2fe049304ead8af7e469f"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "bishop wood"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548567,
+                        25.039616
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "49ae62f9e51fede2bd524cb16b87c778"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548694,
+                        25.039343
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "4e2f325e41f4b5d515b91e14c3a51707"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "sacred garlic pear"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.549262,
+                        25.038406
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "4e3c4c7958de7bdb26c381c2f8782688"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "banyan tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548524,
+                        25.037201
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "4ebdfc7f9256da6fedbeb140a5ed30e2"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "banyan tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.549448,
+                        25.038147
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "4ff927643878bfc29a07ff9d5dc058fa"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "flamboyant"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548436,
+                        25.038621
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "54d81d20c650844f86507a655f4aecde"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548729,
+                        25.038874
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "57034d9c4138af4bc4ef348d9d9987fd"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548717,
+                        25.039706
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "577dd321133d6ede3d490df60b6b9908"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548732,
+                        25.03973
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "57e84c6af1bbb5ff6725e3a0586c220f"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "banyan tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548457,
+                        25.038348
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "5bd582be4b16a93d0618e9e5e96f9c74"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548743,
+                        25.039553
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "5f65dc03bec5797e0e033f8a2ec1e05d"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548625,
+                        25.039372
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "626b0e9dc41a443cbc2026facf8357ab"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "flamboyant"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548273,
+                        25.03853
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "63d03465903ad8785c011accaffcd334"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548777,
+                        25.038983
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "67d37a3880eba4a224627b35bd1eecd9"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "flamboyant"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548004,
+                        25.038219
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "6a12604bf94015b3fdb42ba27c1c387d"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548623,
+                        25.039311
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "6aa2ba52f26b81df877d5ec67ccc6f35"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "banyan tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.549507,
+                        25.037525
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "6b42b56cd28aee089fccffe8980c3881"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "banyan tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548565,
+                        25.039368
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "6cbad1311c174a9f8b8cf512d8aa28d1"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548628,
+                        25.038726
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "6f06881cefd94731741a7f3f8d32574d"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "sacred garlic pear"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548088,
+                        25.038135
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "74d977e3201f289a200c653acdb7525a"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548787,
+                        25.039703
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "780be4c6e335eff10c734fc4d64a6ea2"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548775,
+                        25.03893
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "7a01e2cdc5b03d48db509ec3b2f16ae4"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548671,
+                        25.039524
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "7e3ecd91ce0b2b06b26f1acec0b86abc"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548697,
+                        25.039633
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "82edc32901eba47eab8e0b4b0d7b11c4"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "banyan tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548388,
+                        25.037254
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "841096cf2fb073cfc8d2740ea26f2bd8"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548785,
+                        25.039266
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "88051c7e943cd6d849da537ea14bd86f"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "flamboyant"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548102,
+                        25.038377
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "8a6f33e58d5f2aa108ba73377ba35bbe"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548774,
+                        25.038729
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "8c6179b20c8ad29204e6486a287bcdbe"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548619,
+                        25.039668
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "8d0c647a91f2119ec09494dd75b27a7f"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "banyan tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.549148,
+                        25.038292
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "8e7534dcddc92989875acedb22035616"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.54875,
+                        25.039479
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "97554f9d1aeaa2b644d10e2615cacba4"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "banyan tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.549456,
+                        25.037639
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "a279ccb2bbd0f9227e978c5b5f31c662"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "banyan tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548519,
+                        25.038298
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "a2dd8b46f416f04b7134707886443790"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548697,
+                        25.038726
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "a71173d4ff01c963c7e11595a7d112c0"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548777,
+                        25.039623
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "b20a1b12027106ec076c3d5475725070"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "banyan tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548571,
+                        25.039515
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "b417f7ba0afe9513a9ac67a05231be58"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "flamboyant"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.547795,
+                        25.038091
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "b7a35215ecaf6a83c3bf8cd54de16f2d"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "banyan tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.549435,
+                        25.038039
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "b88fbe8013734e67bafcc11fac9a06b8"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548746,
+                        25.039406
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "bc75aae98497cc8b9ea0b06b30dacf73"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548626,
+                        25.038872
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "bfc143d48817612cc5db911f5aae040a"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "flamboyant"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.547663,
+                        25.038095
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "c39421758e57c5f23f23d3888d1fe41a"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "banyan tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.549147,
+                        25.037215
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "cc9874e6354e3ab35a9c64167c1822fa"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548733,
+                        25.039096
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "d37ed982f6aa726949593fe3755d201f"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548623,
+                        25.03948
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "d66a7c6175e0a95b28b8740379d87a32"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "flamboyant"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.54835,
+                        25.038576
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "d9527b44b96a154eb5a1a67852217ba6"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "banyan tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.549603,
+                        25.037601
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "dbc2e7434f1951b070668099a6046fc2"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548622,
+                        25.039263
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "dfd63962f14c77116d26b5f635514590"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548674,
+                        25.039459
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "e072692b1497bad38f9c115c14f22b1c"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "banyan tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548556,
+                        25.039099
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "e0cd4346dfffc127c82b5fe1ca2ad5d4"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548703,
+                        25.038797
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "e28465463c99c575d7599068f1184482"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548697,
+                        25.039045
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "e3f0955220b4db4f3ee2b678733f16b9"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "banyan tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.549311,
+                        25.038093
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "ecb693972a18d6f89c44b62c695f50f4"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "banyan tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548237,
+                        25.038166
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "ed122a9f2db848a6ca724345bf357523"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548623,
+                        25.039595
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "f1dc151a61e430d809a215c66dfa6b52"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "banyan tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548559,
+                        25.039178
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "f1f357c1ba609eb19437297a2126dc21"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.54869,
+                        25.039703
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "f5b0692e623d27c043a6f52bfdcaf7c3"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548777,
+                        25.038874
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "f63b23911cce618addee64dd3e0ecab7"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "banyan tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548207,
+                        25.037625
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "f6c8dd27720e83cdb910f768cedbb69f"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "flamboyant"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548039,
+                        25.038289
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "fd3997127443637bc5b0c0c0e52a22ed"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "camphor tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548674,
+                        25.038873
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "ff12f0bdd8a09aa712df7175de1fc3d0"
+                  },
+                  {
+                    "type": "Feature",
+                    "properties": {
+                      "icon": "banyan tree"
+                    },
+                    "geometry": {
+                      "coordinates": [
+                        121.548292,
+                        25.03809
+                      ],
+                      "type": "Point"
+                    },
+                    "id": "ffa39af15489956cce3d9bf742d2c39a"
+                  }
+                                 ]};
+
+    var filterGroup = document.getElementById('filter-group');
+
+    map.on('load', function() {
+    // Add a GeoJSON source containing place coordinates and information.
+      map.addSource('places',{'type': 'geojson','data': places});
+      places.features.forEach(function(feature) {
+        var symbol = feature.properties['icon'];
+        var layerID = 'poi-' + symbol;
+
+        // Add a layer for this symbol type if it hasn't been added already.
+        if (!map.getLayer(layerID)) {
+            map.addLayer({'id': layerID,
+                          'type': 'symbol',
+                          'source': 'places',
+                          'layout': {'icon-image': symbol + '-15',
+                                                  'icon-allow-overlap': true},
+                          'filter': ['==', 'icon', symbol]
+                         });
+
+            // Add checkbox and label elements for the layer.
+            var input = document.createElement('input');
+            input.type = 'checkbox';
+            input.id = layerID;
+            input.checked = true;
+            filterGroup.appendChild(input);
+
+            var label = document.createElement('label');
+            label.setAttribute('for', layerID);
+            label.textContent = symbol;
+            filterGroup.appendChild(label);
+
+            // When the checkbox changes, update the visibility of the layer.
+            input.addEventListener('change',
+                                    function(e) {map.setLayoutProperty(layerID,
+                                                                       'visibility',
+                                                                       e.target.checked ? 'visible' : 'none');});
+
+
+            // Create a popup, but don't add it to the map yet.
+            var popup = new mapboxgl.Popup({closeButton: false,closeOnClick: false});
+
+            map.on('mouseenter', layerID, function(e) {
+            // Change the cursor style as a UI indicator.
+            map.getCanvas().style.cursor = 'pointer';
+
+            var coordinates = e.features[0].geometry.coordinates.slice();
+            var description = e.features[0].properties.icon;
+
+
+            // Ensure that if the map is zoomed out such that multiple
+            // copies of the feature are visible, the popup appears
+            // over the copy being pointed to.
+            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+          }
+
+            // Populate the popup and set its coordinates
+            // based on the feature found.
+            popup
+            .setLngLat(coordinates)
+            .setHTML(description)
+            .addTo(map)
+            });
+
+            // When a click event occurs on a feature in the places layer, open a popup at the
+            // location of the feature, with description HTML from its properties.
+            map.on('click', layerID, function(e) {
+              var description = e.features[0].properties.icon;
+              var result = description + ".html"
+              window.open(result);
+            });
+
+            map.on('mouseleave', layerID, function() {
+            map.getCanvas().style.cursor = '';
+            popup.remove();
+            });
+
+
+           }
+          });});
+
+
+
+  </script>
+
+</body>
+</html>
