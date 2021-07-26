@@ -138,8 +138,13 @@
 
     map.on('load', function() {
     // Add a GeoJSON source containing place coordinates and information.
-      map.addSource('places',{'type': 'geojson',
-                              'data': 'https://raw.githubusercontent.com/heydanieltsai/taipeistreettree/master/refined_tree_total_jan04_3-0.geojson'});
+      map.addSource('places',{
+'type': 'Feature',
+'geometry': {
+'type': 'Point',
+'coordinates': [-121.415061, 40.506229]
+}
+});
       places.features.forEach(function(feature) {
         var symbol = feature.properties['icon'];
         var layerID = 'poi-' + symbol;
